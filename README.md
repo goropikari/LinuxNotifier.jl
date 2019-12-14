@@ -35,7 +35,7 @@ Before using Notifier.jl, you need to install following softwares in your Linux 
 - `libnotify` for a desktop notification
 - `mail` for an e-mail notification
 - `aplay` (Advanced Linux Sound Architecture) for a sound notification
-- `espeak` for reading a given massage aloud
+- `espeak` for reading a given message aloud
 
 ```bash
 $ sudo apt install libnotify-bin alsa-utils espeak mailutils heirloom-mailx bsd-mailx
