@@ -1,7 +1,3 @@
 *.jl.cov
 *.jl.*.cov
 *.jl.mem
-email
-deps/deps.jl
-NEWS.md
-Manifest.toml
