@@ -4,14 +4,21 @@ include("email.jl")
 
 """
 ---
-    Notifier.notify(message; title="Julia", sound=false, time=4, logo)
+    Notifier.notify(message;
+                    title="Julia",
+                    urgency="normal",
+                    sound=false,
+                    time=4,
+                    app_name=PROGRAM_FILE,
+                    sound_backend="aplay"
+                    logo)
 
 Notify by desktop notification.
 
 # Arguments
 - `urgency::AbstractString` : Urgency level ("low", "normal", "critical"). Default is "normal".
 - `sound::Union{Bool, AbstractString}`: Play default sound or specific sound.
-- `time::Real`: Display time.
+- `time::Real`: Display time (seconds).
 - `logo`: Default is Julia logo
 - `app_name::AbstractString` : Name of application sending the notification. Default is the name of your script (e.g. "test.jl") or "Julia REPL"/"Atom Juno" if using any of these two.
 - `sound_backend::AbstractString` : a CLI audio program used ("aplay","sox","vlc")
@@ -58,7 +65,7 @@ function alarm(;sound::AbstractString=joinpath(@__DIR__, "default.wav"),
     elseif backend == "sox"
         @async run(`play -q $sound`)
     elseif backend == "vlc"
-        @async run(`cvlc --play-and-exit --no-loop $sound 2> /dev/null`)
+        @async run(pipeline(`cvlc --play-and-exit --no-loop $sound`, stderr=devnull))
     end
     return nothing
 end
@@ -69,7 +76,7 @@ end
 Read a given message aloud.
 
 # Arguments
-- `backend::AbstractString` : a CLI test-to-speech program used to synthesize speech ("espreak","festival")
+- `backend::AbstractString` : a CLI test-to-speech program used to synthesize speech ("espeak","festival")
 """
 function say(msg::AbstractString;
             backend::AbstractString="espeak")

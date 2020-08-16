@@ -6,6 +6,9 @@ desc = "Notification tools for Julialang"
 authors = ["goropikari <goropikari56@gmail.com>"]
 version = "0.3.0-DEV"
 
+[compat]
+julia = "1.0"
+
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
 Homebrew = "d9be37ee-ecc9-5288-90f1-b9ca67657a75"
