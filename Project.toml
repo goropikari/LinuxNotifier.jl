@@ -1,18 +1,16 @@
-name = "Notifier"
-uuid = "bce5aa3b-8e88-58e5-b7b9-01e2bcd06fb8"
+name = "LinuxNotifier"
+uuid = "c7071ce2-a4be-4d1f-9307-aaba0b0646ef"
 keywords = ["notify", "notification"]
 license = "MIT"
 desc = "Notification tools for Julialang"
 authors = ["goropikari <goropikari56@gmail.com>"]
-version = "0.3.0-DEV"
-
-[compat]
-julia = "1.0"
+version = "0.1.0"
 
 [deps]
 Dates = "ade2ca70-3891-5945-98fb-dc099432e06a"
-Homebrew = "d9be37ee-ecc9-5288-90f1-b9ca67657a75"
-Pkg = "44cfe95a-1eb2-52ea-b672-e2afdf69b78f"
+
+[compat]
+julia = "1.0"
 
 [extras]
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
