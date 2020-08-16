@@ -3,7 +3,14 @@ module LinuxNotifier
 using Dates
 
 import Base.notify
-export notify, alarm, say, countup, countdown
+export notify,
+       alarm,
+       aplay,
+       sox,
+       vlc,
+       say,
+       countup,
+       countdown
 
 """
 ---
@@ -44,25 +51,54 @@ function notify(message::AbstractString;
 end
 notify() = notify("Task completed.")
 
+
+########
+# alarm
+########
+
+abstract type SoundBackend end
+struct Aplay <: SoundBackend end
+struct Sox <: SoundBackend end
+struct Vlc <: SoundBackend end
+
+mutable struct CurrentBackend
+    backend::Type{T} where T <: SoundBackend
+end
+
+const _CURRENT_SOUND_BACKEND = CurrentBackend(Aplay)
+aplay() = _CURRENT_SOUND_BACKEND.backend = Aplay
+sox() = _CURRENT_SOUND_BACKEND.backend = Sox
+vlc() = _CURRENT_SOUND_BACKEND.backend = Vlc
+
 """
     Notifier.alarm(;sound="default.wav")
 
 Notify by sound.
 If you choose a specific sound WAV file, you can play it instead of the default sound.
 
-# Arguments
-- `backend::AbstractString` : a CLI audio program used ("aplay","sox","vlc")
+Default backend is `aplay`. Supported backends are `aplay`, `sox`, and `vlc`.
+You can change backends as follows:
+```
+aplay()
+sox()
+vlc()
+```
 """
-function alarm(;sound::AbstractString=joinpath(@__DIR__, "default.wav"),
-                backend::AbstractString="aplay")
-    if backend == "aplay"
-        @async run(`aplay -q $sound`)
-    elseif backend == "sox"
-        @async run(`play -q $sound`)
-    elseif backend == "vlc"
-        @async run(pipeline(`cvlc --play-and-exit --no-loop $sound`, stderr=devnull))
-    end
-    return nothing
+function alarm(; sound=joinpath(@__DIR__, "default.wav"))
+    alarm(_CURRENT_SOUND_BACKEND.backend, sound)
+    nothing
+end
+function alarm(::Type{Aplay}, sound)
+    @async run(`aplay -q $sound`)
+    nothing
+end
+function alarm(::Type{Sox}, sound)
+    @async run(`play -q $sound`)
+    nothing
+end
+function alarm(::Type{Vlc}, sound)
+    @async run(pipeline(`cvlc --play-and-exit --no-loop $sound`, stderr=devnull))
+    nothing
 end
 
 """
@@ -93,7 +129,6 @@ function countup(hour::T, minute::T, second::T) where T <: Integer
     for t in 1:(hour*3600 + minute * 60 + second)
         update_printtime(t)
     end
-    alarm()
 end
 countup(minute::T, second::T) where T <: Integer = countup(0, minute, second)
 countup(second::T) where T <: Integer = countup(0, 0, second)
@@ -112,7 +147,6 @@ function countdown(hour::T, minute::T, second::T) where T <: Integer
     for t in (hour*3600 + minute * 60 + second)-1:-1:0
         update_printtime(t)
     end
-    alarm()
 end
 countdown(minute::T, second::T) where T <: Integer = countdown(0, minute, second)
 countdown(second::T) where T <: Integer = countdown(0, 0, second)
