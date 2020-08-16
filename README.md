@@ -10,7 +10,7 @@ notify("Task completed")
 ```
 ![Screenshot of a Notification](./pictures/linuxpopup.png?raw=true)
 
- ## Features:
+## Features:
 - popup notification (desktop notification)
 - sound notification
 - say notification (Read a given message aloud)
@@ -47,16 +47,27 @@ notify("Task completed", title="foofoo")
 
 ### sound and say notification
 ```julia
-alarm() # only sound. You can specify a sound file, alarm(sound="foo.wav")
-say("Finish calculation!") # Read aloud
-```
+# only sound
+alarm()
 
-### Timer
-When the specified time limit has been reached, notify by sound.
-```julia
-h,m,s = 1,2,3
-countup(h,m,s) # Hour, Minute, Second
-countdown(h,m,s)
+# You can specify a sound file
+alarm(sound="/path/to/foo.wav")
+
+# Default sound backend is `aplay`.
+# `sox` and `vlc` are also supported.
+# Change backend as follows.
+aplay()
+sox()
+vlc()
+
+# Read aloud
+say("Finish calculation!")
+
+# Default speak backend is `espeak`.
+# `festival` is also supported.
+# Change backend as follows.
+espeak()
+festival()
 ```
 
 ## Acknowledgement
