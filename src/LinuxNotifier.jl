@@ -9,8 +9,8 @@ export notify,
        sox,
        vlc,
        say,
-       countup,
-       countdown
+       espeak,
+       festival
 
 """
 ---
@@ -114,7 +114,7 @@ mutable struct CurrentSpeakBackend
 end
 
 const _CURRENT_SPEAK_BACKEND = CurrentSpeakBackend(Espeak)
-epeak() = _CURRENT_SPEAK_BACKEND.backend = Espeak
+espeak() = _CURRENT_SPEAK_BACKEND.backend = Espeak
 festival() = _CURRENT_SPEAK_BACKEND.backend = Festival
 
 """
